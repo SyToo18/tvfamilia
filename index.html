@@ -101,16 +101,16 @@
   <div class="container">
     <div class="sidebar">
       <h2>Canales de TV</h2>
-      <div class="channel" onclick="loadChannel('https://rockhd.lol/live/stream-435.php')">Movistar Liga de Campeones</div>
-      <div class="channel" onclick="loadChannel('https://rockhd.lol/live/stream-123.php')">ESPN</div>
-      <div class="channel" onclick="loadChannel('https://rockhd.lol/live/stream-103.php')">Fox Sports</div>
-      <div class="channel" onclick="loadChannel('https://rockhd.lol/live/stream-104.php')">TNT Sports</div>
-      <div class="channel" onclick="loadChannel('https://rockhd.lol/live/stream-105.php')">DAZN</div>
-      <div class="channel" onclick="loadChannel('https://rockhd.lol/live/stream-106.php')">GolTV</div>
-      <div class="channel" onclick="loadChannel('https://rockhd.lol/live/stream-107.php')">Telemundo Deportes</div>
-      <div class="channel" onclick="loadChannel('https://rockhd.lol/live/stream-108.php')">Canal 4</div>
-      <div class="channel" onclick="loadChannel('https://rockhd.lol/live/stream-109.php')">TyC Sports</div>
-      <div class="channel" onclick="loadChannel('https://rockhd.lol/live/stream-110.php')">Sky Sports</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-435.php')">Movistar Liga de Campeones</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-539.php')">Liga Hypermotion</div>
+      <div class="channel" onclick="selectChannel('https://miatvhd.xyz/reproductor/canal51.html')">DAZN LA LIGA</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-523.php')">La liga</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-105.php')">NO SABER</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-445.php')">DAZN 1</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-525.php')">EUROSPORT 2</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-521.php')">Vamos</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-537.php')">DAZN F1</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-110.php')">Sky Sports</div>
     </div>
 
     <div class="content">
@@ -119,8 +119,20 @@
   </div>
 
   <script>
-    function loadChannel(url) {
-      document.getElementById('player').src = url;
+    function selectChannel(url) {
+      const encodedUrl = encodeURIComponent(url);
+      window.location.href = window.location.pathname + '?canal=' + encodedUrl;
+    }
+
+    function getChannelFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('canal');
+    }
+
+    // Al cargar la página, si hay un canal en la URL, se reproduce
+    const selectedChannel = getChannelFromURL();
+    if (selectedChannel) {
+      document.getElementById('player').src = decodeURIComponent(selectedChannel);
     }
   </script>
 
