@@ -8,7 +8,6 @@
     * {
       box-sizing: border-box;
     }
-
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -17,13 +16,11 @@
       flex-direction: column;
       min-height: 100vh;
     }
-
     .container {
       display: flex;
       flex-direction: row;
       height: 100vh;
     }
-
     .sidebar {
       width: 260px;
       background-color: #ffffff;
@@ -33,13 +30,11 @@
       overflow-y: auto;
       box-shadow: 2px 0 5px rgba(0,0,0,0.05);
     }
-
     .sidebar h2 {
       margin-top: 0;
       font-size: 22px;
       color: #2c3e50;
     }
-
     .channel {
       margin: 10px 0;
       cursor: pointer;
@@ -49,29 +44,24 @@
       transition: background-color 0.3s, transform 0.2s;
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
-
     .channel:hover {
       background-color: #d0e6ff;
       transform: scale(1.02);
     }
-
     .content {
       flex: 1;
       background-color: #000;
       position: relative;
     }
-
     .content iframe {
       width: 100%;
       height: 100%;
       border: none;
     }
-
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
       }
-
       .sidebar {
         width: 100%;
         height: auto;
@@ -83,13 +73,11 @@
         border-right: none;
         border-bottom: 1px solid #e0e0e0;
       }
-
       .channel {
         flex: 1 1 45%;
         margin: 8px;
         text-align: center;
       }
-
       .content {
         height: 60vh;
       }
@@ -97,10 +85,10 @@
   </style>
 </head>
 <body>
-
   <div class="container">
     <div class="sidebar">
       <h2>Canales de TV</h2>
+      <div class="channel" onclick="selectChannel('https://antenacentral.store/movistarliga1.php')">M Liga ESPAÑA</div>
       <div class="channel" onclick="selectChannel('https://rereyano.ru/player/2/49')">M Liga ESPAÑA</div>
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-435.php')">Movistar Liga de Campeones</div>
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-539.php')">Liga Hypermotion</div>
@@ -113,32 +101,29 @@
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-521.php')">Vamos</div>
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-537.php')">DAZN F1</div>
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-110.php')">Sky Sports</div>
-
+    </div>
     <div class="content">
       <iframe id="player" allowfullscreen></iframe>
     </div>
   </div>
-
   <script>
     function selectChannel(url) {
       const encodedUrl = encodeURIComponent(url);
       window.location.href = window.location.pathname + '?canal=' + encodedUrl;
     }
-
     function getChannelFromURL() {
       const params = new URLSearchParams(window.location.search);
       return params.get('canal');
     }
-
     // Al cargar la página, si hay un canal en la URL, se reproduce
     const selectedChannel = getChannelFromURL();
     if (selectedChannel) {
       document.getElementById('player').src = decodeURIComponent(selectedChannel);
     }
   </script>
-
 </body>
 </html>
+
 
 
 
