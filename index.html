@@ -36,10 +36,13 @@
       color: #2c3e50;
     }
     .channel {
-  flex: 1 1 45%;
-  margin: 8px;
-  text-align: center;
-}
+      margin: 10px 0;
+      cursor: pointer;
+      padding: 12px 15px;
+      background-color: #ecf0f1;
+      border-radius: 8px;
+      transition: background-color 0.3s, transform 0.2s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
     .channel:hover {
       background-color: #d0e6ff;
@@ -63,7 +66,6 @@
       }
       .sidebar {
         width: 100%;
-        height: auto;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-around;
@@ -79,7 +81,7 @@
       }
     }
 
-    /* SOLO para móviles en vertical (portrait): mitad pantalla para canales y mitad para el player */
+    /* Solo en móviles en orientación vertical */
     @media (max-width: 768px) and (orientation: portrait) {
       .container {
         flex-direction: column;
@@ -88,6 +90,13 @@
       .sidebar {
         height: 50vh;
         overflow-y: auto;
+        display: block;
+        padding: 10px 15px;
+      }
+      .channel {
+        width: 100%;
+        margin: 8px 0;
+        text-align: center;
       }
       .content {
         height: 50vh;
@@ -103,7 +112,27 @@
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-84.php')">M Liga ESPAÑA</div>
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-435.php')">Movistar Liga de Campeones</div>
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-539.php')">Liga Hypermotion</div>
-      <!-- (el resto de los canales sigue igual) -->
+      <div class="channel" onclick="selectChannel('https://antenaplanet.store/liga2.php')">Liga Hypermotion</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-538.php')">DAZN LA LIGA</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-55.php')">DAZN LA LIGA</div>
+      <div class="channel" onclick="selectChannel('https://antenacentral.store/dazn2laliga.php')">DAZN LA LIGA 2</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-523.php')">La liga(INGLES)</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-105.php')">NO SABER</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-448.php')">DAZN</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-445.php')">DAZN 1</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-446.php')">DAZN 2</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-447.php')">DAZN 3</div>
+      <div class="channel" onclick="selectChannel('https://soonsports.live/n/sports-tn-1')">PLAYOFF NBA(INGLES)</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-524.php')">EUROSPORT 1</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-525.php')">EUROSPORT 2</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-521.php')">Vamos</div>
+      <div class="channel" onclick="selectChannel('https://antenacentral.store/vamos.php')">Vamos</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-529.php')">TDP</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-526.php')">M DEPORTES</div>
+      <div class="channel" onclick="selectChannel('https://antenacentral.store/movistar2.php')">M DEPORTES 2(ATP WORLD)</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-537.php')">DAZN F1</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-528.php')">M GOLF</div>
+      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-110.php')">Sky Sports</div>
     </div>
     <div class="content">
       <iframe id="player" allowfullscreen></iframe>
@@ -125,7 +154,3 @@
   </script>
 </body>
 </html>
-
-
-
-
