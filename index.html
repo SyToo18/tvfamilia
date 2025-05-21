@@ -58,28 +58,28 @@
       height: 100%;
       border: none;
     }
+
+    /* Responsive: Modo móvil vertical */
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
       }
       .sidebar {
         width: 100%;
-        height: auto;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
+        height: 50vh; /* mitad de la pantalla */
+        overflow-y: auto;
+        display: block;
         padding: 15px;
-        box-shadow: none;
         border-right: none;
         border-bottom: 1px solid #e0e0e0;
+        box-shadow: none;
       }
       .channel {
-        flex: 1 1 45%;
-        margin: 8px;
+        margin: 8px 0;
         text-align: center;
       }
       .content {
-        height: 60vh;
+        height: 50vh; /* mitad de la pantalla */
       }
     }
   </style>
@@ -109,34 +109,8 @@
       <div class="channel" onclick="selectChannel('https://antenacentral.store/vamos.php')">Vamos</div>
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-529.php')">TDP</div>
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-526.php')">M DEPORTES</div>
-      <div class="channel" onclick="selectChannel('https://antenacentral.store/movistar2.php')">M DEPORTES 2(ATP WORLD)</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-537.php')">DAZN F1</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-528.php')">M GOLF</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-110.php')">Sky Sports</div>
-     
-      
-    </div>
-    <div class="content">
-      <iframe id="player" allowfullscreen></iframe>
-    </div>
-  </div>
-  <script>
-    function selectChannel(url) {
-      const encodedUrl = encodeURIComponent(url);
-      window.location.href = window.location.pathname + '?canal=' + encodedUrl;
-    }
-    function getChannelFromURL() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('canal');
-    }
-    // Al cargar la página, si hay un canal en la URL, se reproduce
-    const selectedChannel = getChannelFromURL();
-    if (selectedChannel) {
-      document.getElementById('player').src = decodeURIComponent(selectedChannel);
-    }
-  </script>
-</body>
-</html>
+      <div class="channel" onclick="selectChannel('https://antenacentral.store/
+
 
 
 
