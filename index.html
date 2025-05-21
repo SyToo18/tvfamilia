@@ -111,7 +111,28 @@
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-526.php')">M DEPORTES</div>
       <div class="channel" onclick="selectChannel('https://antenacentral.store/
 
-
+</div>
+    <div class="content">
+      <iframe id="player" allowfullscreen></iframe>
+    </div>
+  </div>
+  <script>
+    function selectChannel(url) {
+      const encodedUrl = encodeURIComponent(url);
+      window.location.href = window.location.pathname + '?canal=' + encodedUrl;
+    }
+    function getChannelFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('canal');
+    }
+    // Al cargar la página, si hay un canal en la URL, se reproduce
+    const selectedChannel = getChannelFromURL();
+    if (selectedChannel) {
+      document.getElementById('player').src = decodeURIComponent(selectedChannel);
+    }
+  </script>
+</body>
+</html>
 
 
 
