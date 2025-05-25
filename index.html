@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Canales de TV en Vivo</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -35,6 +33,26 @@
       font-size: 22px;
       color: #2c3e50;
     }
+    .menu-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .menu-buttons button {
+      flex: 1;
+      margin: 2px;
+      padding: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      background-color: #ecf0f1;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+    .menu-buttons button.active {
+      background-color: #3498db;
+      color: white;
+    }
     .channel {
       margin: 10px 0;
       cursor: pointer;
@@ -58,8 +76,13 @@
       height: 100%;
       border: none;
     }
+    .channel-group {
+      display: none;
+    }
+    .channel-group.active {
+      display: block;
+    }
 
-    /* Estilo general para móviles */
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
@@ -80,35 +103,20 @@
         text-align: center;
       }
     }
-
-    /* Solo en móviles en orientación vertical */
-    @media (max-width: 768px) and (orientation: portrait) {
-      .container {
-        flex-direction: column;
-        height: 100vh;
-      }
-      .sidebar {
-        height: 50vh;
-        overflow-y: auto;
-        display: block;
-        padding: 10px 15px;
-      }
-      .channel {
-        width: 100%;
-        margin: 8px 0;
-        text-align: center;
-      }
-      .content {
-        height: 50vh;
-      }
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="sidebar">
       <h2>Canales de TV</h2>
-      <div class="channel" onclick="selectChannel('https://soonsports.live/n/sports-tn-1')">PLAYOFF NBA(INGLES)</div>
+      <div class="menu-buttons">
+        <button id="btn-premium" onclick="toggleGroup('premium')">PREMIUM</button>
+        <button id="btn-normales" onclick="toggleGroup('normales')">NORMALES</button>
+      </div>
+
+      <!-- Canales PREMIUM -->
+      <div id="premium" class="channel-group">
+              <div class="channel" onclick="selectChannel('https://soonsports.live/n/sports-tn-1')">PLAYOFF NBA(INGLES)</div>
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-84.php')">M Liga ESPAÑA</div>
       <div class="channel" onclick="selectChannel('https://antenacentral.store/movistarliga1.php')">M Liga ESPAÑA</div>
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-435.php')">Movistar Liga de Campeones</div>
@@ -132,24 +140,67 @@
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-537.php')">DAZN F1</div>
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-528.php')">M GOLF</div>
       <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-110.php')">Sky Sports</div>
+        
+      </div>
+
+      <!-- Canales NORMALES -->
+      <div id="normales" class="channel-group">
+        <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-130.php', 'normales')">Normal</div>
+       
+      </div>
     </div>
+
     <div class="content">
       <iframe id="player" allowfullscreen></iframe>
     </div>
   </div>
-  <script>
-    function selectChannel(url) {
-      const encodedUrl = encodeURIComponent(url);
-      window.location.href = window.location.pathname + '?canal=' + encodedUrl;
+<script>
+  function selectChannel(url, group = 'premium') {
+    // Cargar el canal en el iframe sin recargar la página
+    document.getElementById('player').src = url;
+
+    // Actualizar la URL en la barra de navegación (sin recargar)
+    const encodedUrl = encodeURIComponent(url);
+    const newUrl = `${window.location.pathname}?canal=${encodedUrl}&grupo=${group}`;
+    window.history.replaceState({}, '', newUrl);
+
+    // Actualizar el botón activo visualmente (opcional)
+    toggleGroup(group);
+  }
+
+  function getParam(param) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(param);
+  }
+
+  function toggleGroup(group) {
+    // Oculta ambos grupos y luego muestra solo el activo
+    document.getElementById('premium').classList.remove('active');
+    document.getElementById('normales').classList.remove('active');
+    document.getElementById(group).classList.add('active');
+
+    // Actualiza estilos de los botones
+    document.getElementById('btn-premium').classList.remove('active');
+    document.getElementById('btn-normales').classList.remove('active');
+    document.getElementById('btn-' + group).classList.add('active');
+  }
+
+  // Al cargar la página
+  window.onload = function () {
+    const canal = getParam('canal');
+    const grupo = getParam('grupo') || 'premium';
+
+    // Mostrar grupo correcto
+    toggleGroup(grupo);
+
+    // Cargar canal si existe
+    if (canal) {
+      document.getElementById('player').src = decodeURIComponent(canal);
     }
-    function getChannelFromURL() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('canal');
-    }
-    const selectedChannel = getChannelFromURL();
-    if (selectedChannel) {
-      document.getElementById('player').src = decodeURIComponent(selectedChannel);
-    }
-  </script>
+  };
+</script>
 </body>
 </html>
+
+  
+
