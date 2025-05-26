@@ -111,32 +111,32 @@
         box-shadow: none;
         border-right: none;
         border-bottom: 1px solid #e0e0e0;
-        height: 40vh; /* Altura fija para la lista de canales */
+        height: 60vh; /* Más espacio para la lista de canales */
       }
       .sidebar-header {
         position: static; /* Quita el sticky en móvil ya que el sidebar tiene altura fija */
       }
       .channels-container {
-        max-height: calc(40vh - 100px); /* Ajusta según altura del header */
+        max-height: calc(60vh - 100px); /* Ajusta según altura del header */
         overflow-y: auto;
       }
       .content {
-        height: 60vh; /* Reproductor más grande en móvil */
-        min-height: 60vh;
+        height: 40vh; /* Reproductor más pequeño en móvil (50% del tamaño original) */
+        min-height: 40vh;
       }
     }
     
     /* Ajustes para móviles más pequeños */
     @media (max-width: 480px) {
       .sidebar {
-        height: 35vh; /* Menos espacio para canales */
+        height: 55vh; /* Más espacio para canales */
       }
       .channels-container {
-        max-height: calc(35vh - 100px);
+        max-height: calc(55vh - 100px);
       }
       .content {
-        height: 65vh; /* Más espacio para el reproductor */
-        min-height: 65vh;
+        height: 45vh; /* Mantenemos el reproductor pequeño */
+        min-height: 45vh;
       }
     }
   </style>
