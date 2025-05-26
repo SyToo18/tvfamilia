@@ -25,8 +25,12 @@
       color: #333;
       padding: 20px;
       border-right: 1px solid #e0e0e0;
-      overflow-y: auto;
       box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-header {
+      flex-shrink: 0;
     }
     .sidebar h2 {
       margin-top: 0;
@@ -37,6 +41,7 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 15px;
+      flex-shrink: 0;
     }
     .menu-buttons button {
       flex: 1;
@@ -52,6 +57,10 @@
     .menu-buttons button.active {
       background-color: #3498db;
       color: white;
+    }
+    .channels-container {
+      overflow-y: auto;
+      flex-grow: 1;
     }
     .channel {
       margin: 10px 0;
@@ -89,18 +98,32 @@
       }
       .sidebar {
         width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
         padding: 15px;
         box-shadow: none;
         border-right: none;
         border-bottom: 1px solid #e0e0e0;
+        height: auto;
+      }
+      .channels-container {
+        width: 100%;
+        max-height: 30vh; /* Altura máxima para los canales en móvil */
       }
       .channel {
         flex: 1 1 45%;
         margin: 8px;
         text-align: center;
+      }
+      .content {
+        height: 60vh; /* Hacemos el reproductor más grande en vertical */
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .content {
+        height: 70vh; /* Aún más grande en pantallas pequeñas */
+      }
+      .channels-container {
+        max-height: 25vh;
       }
     }
   </style>
@@ -108,50 +131,52 @@
 <body>
   <div class="container">
     <div class="sidebar">
-      <h2>Canales de TV</h2>
-      <div class="menu-buttons">
-        <button id="btn-premium" onclick="toggleGroup('premium')">PREMIUM</button>
-        <button id="btn-normales" onclick="toggleGroup('normales')">NORMALES</button>
+      <div class="sidebar-header">
+        <h2>Canales de TV</h2>
+        <div class="menu-buttons">
+          <button id="btn-premium" onclick="toggleGroup('premium')">PREMIUM</button>
+          <button id="btn-normales" onclick="toggleGroup('normales')">NORMALES</button>
+        </div>
       </div>
+      
+      <div class="channels-container">
+        <!-- Canales PREMIUM -->
+        <div id="premium" class="channel-group">
+          <div class="channel" onclick="selectChannel('https://soonsports.live/n/sports-tn-1')">PLAYOFF NBA(INGLES)</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-84.php')">M Liga ESPAÑA</div>
+          <div class="channel" onclick="selectChannel('https://antenacentral.store/movistarliga1.php')">M Liga ESPAÑA</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-435.php')">Movistar Liga de Campeones</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-539.php')">Liga Hypermotion</div>
+          <div class="channel" onclick="selectChannel('https://antenaplanet.store/liga2.php')">Liga Hypermotion</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-538.php')">DAZN LA LIGA</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-55.php')">DAZN LA LIGA</div>
+          <div class="channel" onclick="selectChannel('https://antenacentral.store/dazn2laliga.php')">DAZN LA LIGA 2</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-523.php')">La liga(INGLES)</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-526.php')">M DEPORTES</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-448.php')">DAZN</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-445.php')">DAZN 1</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-446.php')">DAZN 2</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-447.php')">DAZN 3</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-524.php')">EUROSPORT 1</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-525.php')">EUROSPORT 2</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-521.php')">Vamos</div>
+          <div class="channel" onclick="selectChannel('https://antenacentral.store/vamos.php')">Vamos</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-529.php')">TDP</div>
+          <div class="channel" onclick="selectChannel('https://antenacentral.store/movistar2.php')">M DEPORTES 2(ATP WORLD)</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-537.php')">DAZN F1</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-528.php')">M GOLF</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-110.php')">Sky Sports</div>
+        </div>
 
-      <!-- Canales PREMIUM -->
-      <div id="premium" class="channel-group">
-              <div class="channel" onclick="selectChannel('https://soonsports.live/n/sports-tn-1')">PLAYOFF NBA(INGLES)</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-84.php')">M Liga ESPAÑA</div>
-      <div class="channel" onclick="selectChannel('https://antenacentral.store/movistarliga1.php')">M Liga ESPAÑA</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-435.php')">Movistar Liga de Campeones</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-539.php')">Liga Hypermotion</div>
-      <div class="channel" onclick="selectChannel('https://antenaplanet.store/liga2.php')">Liga Hypermotion</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-538.php')">DAZN LA LIGA</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-55.php')">DAZN LA LIGA</div>
-      <div class="channel" onclick="selectChannel('https://antenacentral.store/dazn2laliga.php')">DAZN LA LIGA 2</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-523.php')">La liga(INGLES)</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-526.php')">M DEPORTES</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-448.php')">DAZN</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-445.php')">DAZN 1</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-446.php')">DAZN 2</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-447.php')">DAZN 3</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-524.php')">EUROSPORT 1</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-525.php')">EUROSPORT 2</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-521.php')">Vamos</div>
-      <div class="channel" onclick="selectChannel('https://antenacentral.store/vamos.php')">Vamos</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-529.php')">TDP</div>
-      <div class="channel" onclick="selectChannel('https://antenacentral.store/movistar2.php')">M DEPORTES 2(ATP WORLD)</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-537.php')">DAZN F1</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-528.php')">M GOLF</div>
-      <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-110.php')">Sky Sports</div>
-        
-      </div>
-
-      <!-- Canales NORMALES -->
-      <div id="normales" class="channel-group">
-        <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-533.php', 'normales')">LA 1</div>
-        <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-536.php', 'normales')">LA 2</div>
-        <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-531.php', 'normales')">Antena 3</div>
-        <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-535.php', 'normales')">Cuatro</div>
-        <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-532.php', 'normales')">Telecinco</div>
-        <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-534.php', 'normales')">La Sexta</div>
-       
+        <!-- Canales NORMALES -->
+        <div id="normales" class="channel-group">
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-533.php', 'normales')">LA 1</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-536.php', 'normales')">LA 2</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-531.php', 'normales')">Antena 3</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-535.php', 'normales')">Cuatro</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-532.php', 'normales')">Telecinco</div>
+          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-534.php', 'normales')">La Sexta</div>
+        </div>
       </div>
     </div>
 
@@ -206,6 +231,4 @@
 </script>
 </body>
 </html>
-
-  
 
