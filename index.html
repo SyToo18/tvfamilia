@@ -18,6 +18,7 @@
       display: flex;
       flex-direction: row;
       height: 100vh;
+      width: 100%;
     }
     .sidebar {
       width: 260px;
@@ -28,6 +29,7 @@
       box-shadow: 2px 0 5px rgba(0,0,0,0.05);
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
     .sidebar-header {
       flex-shrink: 0;
@@ -65,8 +67,8 @@
     .channels-container {
       overflow-y: auto;
       flex-grow: 1;
-      margin-top: -15px; /* Compensa el padding del header */
-      padding-top: 15px; /* Espacio para el sticky header */
+      margin-top: -15px;
+      padding-top: 15px;
     }
     .channel {
       margin: 10px 0;
@@ -85,11 +87,27 @@
       flex: 1;
       background-color: #000;
       position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .player-container {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .content iframe {
       width: 100%;
       height: 100%;
       border: none;
+      aspect-ratio: 16/9;
+      max-width: 100%;
+      max-height: 100%;
     }
     .channel-group {
       display: none;
@@ -111,32 +129,35 @@
         box-shadow: none;
         border-right: none;
         border-bottom: 1px solid #e0e0e0;
-        height: 60vh; /* Más espacio para la lista de canales */
+        flex: 1;
+        min-height: 40vh;
+        max-height: 50vh;
       }
       .sidebar-header {
-        position: static; /* Quita el sticky en móvil ya que el sidebar tiene altura fija */
+        position: static;
       }
       .channels-container {
-        max-height: calc(60vh - 100px); /* Ajusta según altura del header */
+        max-height: none;
         overflow-y: auto;
       }
       .content {
-        height: 20vh; /* Reproductor más pequeño en móvil (50% del tamaño original)(TOCAR) */
-        min-height: 40vh;
+        flex: 2;
+        min-height: 50vh;
+      }
+      .content iframe {
+        width: 100%;
+        height: 100%;
       }
     }
     
     /* Ajustes para móviles más pequeños */
     @media (max-width: 480px) {
       .sidebar {
-        height: 55vh; /* Más espacio para canales */
-      }
-      .channels-container {
-        max-height: calc(55vh - 100px);
+        min-height: 45vh;
+        max-height: 45vh;
       }
       .content {
-        height: 45vh; /* Mantenemos el reproductor pequeño */
-        min-height: 45vh;
+        min-height: 55vh;
       }
     }
   </style>
@@ -194,7 +215,9 @@
     </div>
 
     <div class="content">
-      <iframe id="player" allowfullscreen></iframe>
+      <div class="player-container">
+        <iframe id="player" allowfullscreen></iframe>
+      </div>
     </div>
   </div>
 <script>
@@ -220,6 +243,26 @@
     document.getElementById('btn-' + group).classList.add('active');
   }
 
+  function adjustPlayerSize() {
+    const player = document.getElementById('player');
+    const content = document.querySelector('.content');
+    const containerWidth = content.clientWidth;
+    const containerHeight = content.clientHeight;
+    
+    // Mantener relación de aspecto 16:9
+    const aspectRatio = 16 / 9;
+    let width = containerWidth;
+    let height = width / aspectRatio;
+    
+    if (height > containerHeight) {
+      height = containerHeight;
+      width = height * aspectRatio;
+    }
+    
+    player.style.width = `${width}px`;
+    player.style.height = `${height}px`;
+  }
+
   window.onload = function () {
     const canal = getParam('canal');
     const grupo = getParam('grupo') || 'premium';
@@ -227,7 +270,10 @@
     if (canal) {
       document.getElementById('player').src = decodeURIComponent(canal);
     }
+    adjustPlayerSize();
   };
+
+  window.addEventListener('resize', adjustPlayerSize);
 </script>
 </body>
 </html>
