@@ -1,233 +1,41 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Canales de TV en Vivo</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f9f9fb;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    .container {
-      display: flex;
-      flex-direction: row;
-      height: 100vh;
-    }
-    .sidebar {
-      width: 260px;
-      background-color: #ffffff;
-      color: #333;
-      padding: 20px;
-      border-right: 1px solid #e0e0e0;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-    }
-    .sidebar-header {
-      flex-shrink: 0;
-      position: sticky;
-      top: 0;
-      background: white;
-      z-index: 10;
-      padding-bottom: 15px;
-    }
-    .sidebar h2 {
-      margin-top: 0;
-      font-size: 22px;
-      color: #2c3e50;
-    }
-    .menu-buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 15px;
-    }
-    .menu-buttons button {
-      flex: 1;
-      margin: 2px;
-      padding: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      border: none;
-      background-color: #ecf0f1;
-      border-radius: 6px;
-      transition: background-color 0.3s;
-    }
-    .menu-buttons button.active {
-      background-color: #3498db;
-      color: white;
-    }
-    .channels-container {
-      overflow-y: auto;
-      flex-grow: 1;
-      margin-top: -15px; /* Compensa el padding del header */
-      padding-top: 15px; /* Espacio para el sticky header */
-    }
-    .channel {
-      margin: 10px 0;
-      cursor: pointer;
-      padding: 12px 15px;
-      background-color: #ecf0f1;
-      border-radius: 8px;
-      transition: background-color 0.3s, transform 0.2s;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    .channel:hover {
-      background-color: #d0e6ff;
-      transform: scale(1.02);
-    }
-    .content {
-      flex: 1;
-      background-color: #000;
-      position: relative;
-    }
-    .content iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-    .channel-group {
-      display: none;
-    }
-    .channel-group.active {
-      display: block;
-    }
-
-    /* ESTILOS PARA MÓVIL (vertical) */
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        height: auto;
-        min-height: 100vh;
-      }
-      .sidebar {
-        width: 100%;
-        padding: 15px;
-        box-shadow: none;
-        border-right: none;
-        border-bottom: 1px solid #e0e0e0;
-        height: 40vh; /* Altura fija para la lista de canales */
-      }
-      .sidebar-header {
-        position: static; /* Quita el sticky en móvil ya que el sidebar tiene altura fija */
-      }
-      .channels-container {
-        max-height: calc(40vh - 100px); /* Ajusta según altura del header */
-        overflow-y: auto;
-      }
-      .content {
-        height: 60vh; /* Reproductor más grande en móvil */
-        min-height: 60vh;
-      }
-    }
-    
-    /* Ajustes para móviles más pequeños */
-    @media (max-width: 480px) {
-      .sidebar {
-        height: 35vh; /* Menos espacio para canales */
-      }
-      .channels-container {
-        max-height: calc(35vh - 100px);
-      }
-      .content {
-        height: 65vh; /* Más espacio para el reproductor */
-        min-height: 65vh;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <h2>Canales de TV</h2>
-        <div class="menu-buttons">
-          <button id="btn-premium" onclick="toggleGroup('premium')">PREMIUM</button>
-          <button id="btn-normales" onclick="toggleGroup('normales')">NORMALES</button>
-        </div>
-      </div>
-      
-      <div class="channels-container">
-        <!-- Canales PREMIUM -->
-        <div id="premium" class="channel-group">
-          <div class="channel" onclick="selectChannel('https://soonsports.live/n/sports-tn-1')">PLAYOFF NBA(INGLES)</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-84.php')">M Liga ESPAÑA</div>
-          <div class="channel" onclick="selectChannel('https://antenacentral.store/movistarliga1.php')">M Liga ESPAÑA</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-435.php')">Movistar Liga de Campeones</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-539.php')">Liga Hypermotion</div>
-          <div class="channel" onclick="selectChannel('https://antenaplanet.store/liga2.php')">Liga Hypermotion</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-538.php')">DAZN LA LIGA</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-55.php')">DAZN LA LIGA</div>
-          <div class="channel" onclick="selectChannel('https://antenacentral.store/dazn2laliga.php')">DAZN LA LIGA 2</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-523.php')">La liga(INGLES)</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-526.php')">M DEPORTES</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-448.php')">DAZN</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-445.php')">DAZN 1</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-446.php')">DAZN 2</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-447.php')">DAZN 3</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-524.php')">EUROSPORT 1</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-525.php')">EUROSPORT 2</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-521.php')">Vamos</div>
-          <div class="channel" onclick="selectChannel('https://antenacentral.store/vamos.php')">Vamos</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-529.php')">TDP</div>
-          <div class="channel" onclick="selectChannel('https://antenacentral.store/movistar2.php')">M DEPORTES 2(ATP WORLD)</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-537.php')">DAZN F1</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-528.php')">M GOLF</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-110.php')">Sky Sports</div>
-        </div>
-
-        <!-- Canales NORMALES -->
-        <div id="normales" class="channel-group">
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-533.php', 'normales')">LA 1</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-536.php', 'normales')">LA 2</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-531.php', 'normales')">Antena 3</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-535.php', 'normales')">Cuatro</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-532.php', 'normales')">Telecinco</div>
-          <div class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-534.php', 'normales')">La Sexta</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="content">
-      <iframe id="player" allowfullscreen></iframe>
-    </div>
-  </div>
-<script>
-  function selectChannel(url, group = 'premium') {
-    document.getElementById('player').src = url;
-    const encodedUrl = encodeURIComponent(url);
-    const newUrl = `${window.location.pathname}?canal=${encodedUrl}&grupo=${group}`;
-    window.history.replaceState({}, '', newUrl);
-    toggleGroup(group);
+/* ESTILOS PARA MÓVIL (vertical) */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
   }
-
-  function getParam(param) {
-    const params = new URLSearchParams(window.location.search);
-    return params.get(param);
+  .sidebar {
+    width: 100%;
+    padding: 15px;
+    box-shadow: none;
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+    height: 50vh; /* Reducido de 40vh a 50vh para más canales visibles */
   }
-
-  function toggleGroup(group) {
-    document.getElementById('premium').classList.remove('active');
-    document.getElementById('normales').classList.remove('active');
-    document.getElementById(group).classList.add('active');
-    document.getElementById('btn-premium').classList.remove('active');
-    document.getElementById('btn-normales').classList.remove('active');
-    document.getElementById('btn-' + group).classList.add('active');
+  .sidebar-header {
+    position: static;
   }
+  .channels-container {
+    max-height: calc(50vh - 100px); /* Ajustado según nueva altura */
+    overflow-y: auto;
+  }
+  .content {
+    height: 50vh; /* Reducido de 60vh a 50vh */
+    min-height: 50vh;
+  }
+}
 
-  window.onload = function () {
-    const canal = getParam('canal');
-    const grupo = getParam('grupo') || 'premium';
-    toggleGroup(grupo);
-    if (canal) {
-      document.getElementById('player').src = decodeURIComponent(canal);
-    }
-  };
-</script>
-</body>
-</html>
+/* Ajustes para móviles más pequeños */
+@media (max-width: 480px) {
+  .sidebar {
+    height: 45vh; /* Reducido de 35vh a 45vh */
+  }
+  .channels-container {
+    max-height: calc(45vh - 100px);
+  }
+  .content {
+    height: 55vh; /* Reducido de 65vh a 55vh */
+    min-height: 55vh;
+  }
+}
