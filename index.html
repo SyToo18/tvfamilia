@@ -47,7 +47,7 @@
     .menu-buttons {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 5px; /* reducido para acercar los canales */
+      margin-bottom: 5px;
     }
     .menu-buttons button {
       flex: 1;
@@ -67,8 +67,8 @@
     .channels-container {
       overflow-y: auto;
       flex-grow: 1;
-      padding-top: 5px; /* reducido para acercar los canales */
-      margin-top: -15px; /* mantener ajuste si quieres */
+      padding-top: 5px;
+      margin-top: -15px;
     }
     .channel {
       margin: 10px 0;
@@ -135,7 +135,7 @@
       .channels-container {
         max-height: none;
         overflow-y: auto;
-        padding-top: 5px; /* igual que en escritorio */
+        padding-top: 5px;
       }
       .content {
         flex: 1;
@@ -181,7 +181,6 @@
           <div allow="autoplay" class="channel" onclick="selectChannel('https://antenaplanet.store/liga2.php')">Liga Hypermotion</div>
           <div allow="autoplay" class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-538.php')">DAZN LA LIGA</div>
           <div allow="autoplay" class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-55.php')">DAZN LA LIGA</div>
-           <div allow="autoplay" class="channel" onclick="selectChannel('https://tvcstreams.pl/player/tvfhd.php?sTL1?id=538')">DAZN LA LIGA</div>
           <div allow="autoplay" class="channel" onclick="selectChannel('https://antenacentral.store/dazn2laliga.php')">DAZN LA LIGA 2</div>
           <div allow="autoplay" class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-523.php')">La liga(INGLES)</div>
           <div allow="autoplay" class="channel" onclick="selectChannel('https://tvcstreams.pl/player/tvfhd.php?sTL1?id=436')">M DEPORTES</div>
@@ -203,7 +202,6 @@
           <div allow="autoplay" class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-530.php')">GolPLAY</div>
           <div allow="autoplay" class="channel" onclick="selectChannel('https://antenacentral.store/movistar2.php')">M DEPORTES 2(ATP WORLD)</div>
           <div allow="autoplay" class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-537.php')">DAZN F1</div>
-          <div allow="autoplay" class="channel" onclick="selectChannel('https://tvcstreams.pl/player/tvfhd.php?sTL1?id=537')">DAZN F1</div>
           <div allow="autoplay" class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-749.php')">OneTORO</div>
           <div allow="autoplay" class="channel" onclick="selectChannel('https://tvcstreams.pl/player/tvfhd.php?sTL1?id=528')">M GOLF</div>
           <div allow="autoplay" class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-110.php')">Sky Sports</div>
@@ -217,8 +215,6 @@
           <div allow="autoplay" class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-532.php', 'normales')">Telecinco</div>
           <div allow="autoplay" class="channel" onclick="selectChannel('https://rockhd.lol/live/stream-534.php', 'normales')">La Sexta</div>
           <div allow="autoplay" class="channel" onclick="selectChannel('https://tvcstreams.pl/player/tvfhd.php?sTL1?id=287', 'normales')">Mega</div>
-          
-          
         </div>
       </div>
     </div>
@@ -231,7 +227,31 @@
   </div>
 
   <script>
+    // Cambia aquí la contraseña que quieres usar
+    const CONTRASENA = 'Familia5';
+
+    // Función para pedir la contraseña sólo una vez
+    function pedirAcceso() {
+      const acceso = localStorage.getItem('accesoAutorizado');
+      if (acceso === 'true') {
+        return true; // Ya autorizado, no pedir más
+      }
+
+      const pass = prompt('Introduce la contraseña para acceder:');
+      if (pass === CONTRASENA) {
+        localStorage.setItem('accesoAutorizado', 'true');
+        return true;
+      } else {
+        alert('Contraseña incorrecta. No podrás acceder.');
+        return false;
+      }
+    }
+
     function selectChannel(url, group = 'premium') {
+      if (!pedirAcceso()) {
+        // Si no autorizado, no cambiar canal
+        return;
+      }
       document.getElementById('player').src = url;
       const encodedUrl = encodeURIComponent(url);
       const newUrl = `${window.location.pathname}?canal=${encodedUrl}&grupo=${group}`;
@@ -250,31 +270,26 @@
       document.getElementById(group).classList.add('active');
       document.getElementById('btn-premium').classList.remove('active');
       document.getElementById('btn-normales').classList.remove('active');
-      document.getElementById('btn-' + group).classList.add('active');
+      if (group === 'premium') {
+        document.getElementById('btn-premium').classList.add('active');
+      } else {
+        document.getElementById('btn-normales').classList.add('active');
+      }
     }
 
     function adjustPlayerSize() {
-      const player = document.getElementById('player');
+      const iframe = document.getElementById('player');
       const content = document.querySelector('.content');
-      const aspectRatio = 16 / 9;
-
-      const containerWidth = content.clientWidth;
-      const containerHeight = content.clientHeight;
-
-      let width = containerWidth;
-      let height = width / aspectRatio;
-
-      if (height > containerHeight) {
-        height = containerHeight;
-        width = height * aspectRatio;
-      }
-
-      player.style.width = `${width}px`;
-      player.style.height = `${height}px`;
-      player.style.display = 'block';
+      iframe.style.width = content.clientWidth + 'px';
+      iframe.style.height = content.clientHeight + 'px';
     }
 
-    window.onload = function () {
+    window.onload = function() {
+      if (!pedirAcceso()) {
+        // Si no autorizado, no cargar nada
+        document.getElementById('player').src = '';
+        return;
+      }
       const canal = getParam('canal');
       const grupo = getParam('grupo') || 'premium';
       toggleGroup(grupo);
@@ -284,7 +299,7 @@
       adjustPlayerSize();
     };
 
-    window.addEventListener('resize', adjustPlayerSize);
+    window.onresize = adjustPlayerSize;
   </script>
 </body>
 </html>
